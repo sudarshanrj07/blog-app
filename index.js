@@ -12,6 +12,8 @@ mongoConnect(process.env.DB_URL);
 app.set("view engine", "ejs");
 app.set("views", path.resolve("./views"));
 
-app.use("/", userRoutes);
+app.use(express.urlencoded({ extended: false }));
+
+app.use("/api/users", userRoutes);
 
 app.listen(PORT);

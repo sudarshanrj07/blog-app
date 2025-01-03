@@ -1,15 +1,23 @@
 import { Router } from "express";
+import { createUserHandler, loginUserHandler } from "../controllers/user.js";
 
 const router = Router();
 
-router.get("/signup", (req, res) => {
-	res.render("signup");
+router
+	.route("/signup")
+	.get((req, res) => {
+		res.render("signup");
+	})
+	.post(createUserHandler);
+
+router
+	.route("/signin")
+	.get((req, res) => {
+		res.render("signin");
+	})
+	.post(loginUserHandler);
+
+router.get("/", (req, res) => {
+	res.render("home");
 });
-
-router.get("/signin", (req, res) => {
-	res.render("signin");
-});
-
-router.post("/singup");
-
 export default router;
