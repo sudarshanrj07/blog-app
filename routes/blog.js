@@ -1,11 +1,11 @@
 import { Router } from "express";
-import { upload } from "../utils/upload.js";
 
 import {
 	createNewBlog,
 	createUserComment,
 	viewBlogById,
 } from "../controllers/blog.js";
+import { upload } from "../utils/upload.js";
 
 const router = Router();
 

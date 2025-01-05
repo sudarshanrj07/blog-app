@@ -1,13 +1,18 @@
 import { Blog } from "../models/blog.js";
 import { Comments } from "../models/comments.js";
+import { cloud } from "../utils/upload.js";
 
 export const createNewBlog = async (req, res) => {
 	const { title, body } = req.body;
 
+	const filePath = req.file.path;
+
+	const coverImageUrl = await cloud(filePath, req.user._id);
+
 	const blog = await Blog.create({
 		title: title,
 		body: body,
-		coverImageUrl: `/uploads/${req.file.filename}`,
+		coverImageUrl,
 		createdBy: req.user,
 	});
 

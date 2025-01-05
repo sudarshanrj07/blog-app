@@ -22,7 +22,9 @@
 				</li>
 				<% if (locals.user) { %>
 				<li class="nav-item">
-					<a class="nav-link" href="/api/blog/add-new">Add Blog</a>
+					<a class="nav-link" href="/api/blog/add-new" aria-current="page"
+						>Add Blog</a
+					>
 				</li>
 				<li class="nav-item dropdown">
 					<a
@@ -32,20 +34,29 @@
 						data-bs-toggle="dropdown"
 						aria-expanded="false"
 					>
-						<i class="fas fa-user"></i> Account
+						<%= user.name %>
 					</a>
 					<ul class="dropdown-menu">
 						<li>
-							<a class="dropdown-item" href="/api/users/Logout">Logout</a>
+							<a
+								class="dropdown-item"
+								href="/api/users/Logout"
+								aria-current="page"
+								>Logout</a
+							>
 						</li>
 					</ul>
 				</li>
 				<% } else { %>
 				<li class="nav-item">
-					<a class="nav-link" href="/api/users/signup">Create Account</a>
+					<a class="nav-link" href="/api/users/signup" aria-current="page"
+						>Create Account</a
+					>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="/api/users/signin">Signin</a>
+					<a class="nav-link" href="/api/users/signin" aria-current="page"
+						>Signin</a
+					>
 				</li>
 				<% } %>
 			</ul>
