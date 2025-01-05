@@ -5,44 +5,214 @@
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Blog</title>
+
+		<!-- Include external or custom styles -->
+		<style>
+			body {
+				background-color: #121212; /* Dark background */
+				color: #e0e0e0; /* Light text color */
+				font-family: "Arial", sans-serif;
+				line-height: 1.6; /* Improve line height for better readability */
+			}
+
+			h1 {
+				color: #ffffff; /* White color for titles */
+				font-size: 2.5em;
+				margin-bottom: 1rem;
+				text-align: center;
+			}
+
+			.blog-body {
+				background-color: #333; /* Dark background for the blog body */
+				color: #e0e0e0;
+				padding: 1.5rem;
+				border-radius: 8px;
+				margin-top: 1.5rem;
+				max-width: 1000px; /* Limit the width for better text alignment */
+				margin-left: auto;
+				margin-right: auto;
+				line-height: 1.8; /* Adjust line height for readability */
+				font-size: 1.1em; /* Increase font size for easier reading */
+			}
+
+			pre {
+				background-color: #333; /* Dark background for preformatted text */
+				padding: 1rem;
+				border-radius: 8px;
+				color: #e0e0e0;
+				font-size: 1.1em;
+				line-height: 1.6;
+				word-wrap: break-word;
+				white-space: pre-wrap; /* Ensure long words wrap */
+			}
+
+			.container {
+				margin-bottom: 2rem;
+			}
+
+			.container img {
+				border-radius: 8px; /* Rounded corners for images */
+				box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow for images */
+			}
+
+			/* For the user profile image */
+			.profile-img {
+				border-radius: 50%;
+				width: 100px;
+				height: 100px;
+				object-fit: cover;
+			}
+
+			/* Comment section */
+			.comment {
+				background-color: #2a2a2a; /* Darker background for comments */
+				padding: 1rem;
+				border-radius: 8px;
+				margin-top: 1rem;
+				transition: background-color 0.3s ease;
+			}
+
+			.comment:hover {
+				background-color: #333; /* Lighter hover effect */
+			}
+
+			.comment img {
+				border-radius: 50%;
+				width: 50px;
+				height: 50px;
+				object-fit: cover;
+				margin-right: 1rem;
+			}
+
+			.comment-content {
+				display: inline-block;
+				max-width: 80%;
+				vertical-align: top;
+			}
+
+			/* Form styles */
+			.comment-form {
+				background-color: #1d1d1d;
+				padding: 1rem;
+				border-radius: 8px;
+				margin-top: 1rem;
+				display: flex;
+				align-items: center;
+			}
+
+			.comment-form input {
+				background-color: #ffffff;
+				color: #000000;
+				border: 1px solid #444;
+				padding: 0.5rem;
+				border-radius: 8px;
+				flex-grow: 1;
+				margin-right: 1rem;
+			}
+
+			.comment-form button {
+				background-color: #6200ea;
+				color: white;
+				border: none;
+				padding: 0.6rem 1.2rem;
+				border-radius: 8px;
+				cursor: pointer;
+				transition: background-color 0.3s ease;
+			}
+
+			.comment-form button:hover {
+				background-color: #3700b3; /* Hover effect for button */
+			}
+
+			.author-info {
+				display: flex; /* Aligns the image and text horizontally */
+				align-items: center; /* Vertically aligns the items (image and text) */
+			}
+
+			.profile-img {
+				border-radius: 50%; /* Makes the image circular */
+				margin-right: 10px; /* Adds spacing between the image and text */
+			}
+
+			.author-details {
+				display: flex;
+				flex-direction: column; /* Stack the name and date vertically */
+				justify-content: center; /* Vertically aligns the content */
+			}
+
+			.author-name,
+			.created-at {
+				color: #fff; /* Ensures text is white */
+				margin: 0; /* Removes any default margin */
+			}
+
+			.created-at {
+				font-size: 0.875rem; /* Make the date text a bit smaller */
+				color: #bbb; /* Give the date a slightly grey color */
+			}
+		</style>
 	</head>
+
 	<body>
 		<%- include('./partials/nav') %>
 		<div class="container mt-4">
 			<h1><%= blog.title %></h1>
-			<img src="<%= blog.coverImageUrl %>" width="700px" />
-			<pre class="mt-3"><%= blog.body %></pre>
+
+			<img src="<%= blog.coverImageUrl %>" width="100%" alt="Cover Image" />
+			<div class="blog-body">
+				<pre> <%= blog.body %></pre>
+			</div>
 		</div>
 
 		<div class="container mt-4">
-			<img src="<%= blog.createdBy.profileImageUrl %>" width="100px" /> <%=
-			blog.createdBy.name %>
+			<div class="author-info">
+				<img
+					src="<%= blog.createdBy.profileImageUrl %>"
+					width="40px"
+					alt="Profile Image"
+					class="profile-img"
+				/>
+				<div class="author-details">
+					<span class="author-name"><%= blog.createdBy.name %></span>
+					<span class="created-at"
+						><%= blog.createdAt.toLocaleDateString('en-GB'); %></span
+					>
+				</div>
+			</div>
 		</div>
+
 		<div class="container mt-3">
 			<h1>Comments (<%= locals.comments.length %>)</h1>
+
 			<% if (locals.user) { %>
-			<form action="/api/blog/comment/<%= blog._id %>" method="post">
-				<div class="mb-3">
-					<input
-						type="text"
-						name="content"
-						class="form-control"
-						placeholder="Enter Your comments"
-					/>
-					<button type="submit" class="btn btn-primary">Add</button>
-				</div>
+			<form
+				action="/api/blog/comment/<%= blog._id %>"
+				method="post"
+				class="comment-form"
+			>
+				<input
+					type="text"
+					name="content"
+					class="form-control"
+					placeholder="Enter Your comments"
+				/>
+				<button type="submit" class="btn btn-primary">Add</button>
 			</form>
 			<% } %>
+
 			<div class="mt-3">
 				<% comments.forEach(comment => { %>
-				<div class="container mt-3">
-					<img src="<%= comment.userId.profileImageUrl %>" width="50px" /> <%=
-					comment.userId.name %> :
-					<pre><%= comment.content %></pre>
+				<div class="comment">
+					<img src="<%= comment.userId.profileImageUrl %>" alt="User" />
+					<div class="comment-content">
+						<strong><%= comment.userId.name %></strong>:
+						<pre><%= comment.content %></pre>
+					</div>
 				</div>
 				<% }) %>
 			</div>
 		</div>
+
 		<%- include('./partials/scripts') %>
 	</body>
 </html>
