@@ -5,25 +5,145 @@
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Homepage</title>
+		<style>
+			/* Custom Styles for the Homepage */
+			body {
+				font-family: "Roboto", sans-serif;
+				background-color: #121212;
+				color: #ddd;
+        margin: 0;
+				padding: 0;
+				transition: background-color 0.3s ease;
+			}
+
+			.container {
+				margin-top: 30px;
+			}
+      
+
+      
+			.card {
+        display: flex;
+				flex-direction: column;
+        background-color: #000000;
+				border: none;
+				border-radius: 8px;
+				overflow: hidden;
+				box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+				transition: transform 0.3s ease, box-shadow 0.3s ease;
+        height: 400px; /* Fixed height for uniform card sizes */
+				opacity: 0;
+				transform: translateY(20px);
+				transition: opacity 0.6s ease, transform 0.6s ease;
+        
+			}
+
+			
+
+			.card-img-top {
+				width: 100%;
+				height: 200px;
+				object-fit: cover;
+				transition: transform 0.3s ease;
+			}
+
+			.card-body {
+        flex-grow: 1;
+				padding: 16px;
+				display: flex;
+				flex-direction: column;
+				justify-content: space-between;
+			}
+
+			.card-title {
+				font-size: 1.25rem;
+				font-weight: 500;
+				color: #fff;
+				margin-bottom: 12px;
+			}
+
+			.btn-primary {
+				background-color: #007bff;
+				border-color: #007bff;
+				font-size: 14px;
+				text-transform: uppercase;
+				padding: 8px 16px;
+				border-radius: 4px;
+				transition: background-color 0.3s ease;
+			}
+
+			.btn-primary:hover {
+				background-color: #0056b3;
+				border-color: #004085;
+			}
+
+			@media (max-width: 768px) {
+				.row-cols-3 {
+					grid-template-columns: repeat(2, 1fr);
+				}
+			}
+
+			@media (max-width: 576px) {
+				.row-cols-3 {
+					grid-template-columns: 1fr;
+				}
+			}
+      .card.visible {
+				opacity: 1;
+				transform: translateY(0);
+			}
+
+      .card:hover {
+				transform: translateY(-12px) scale(1.05);
+				box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+			}
+		</style>
 	</head>
+
 	<body>
 		<%- include('./partials/nav') %>
-		<div class="container mt-3 row row-cols-4">
-			<% blogs.forEach(blog => { %>
-			<div class="col">
-				<div class="card" style="width: 18rem">
-					<img src="<%= blog.coverImageUrl %>" class="card-img-top" />
-					<div class="card-body">
-						<h5 class="card-title"><%= blog.title %></h5>
-
-						<a href="/api/blog/<%= blog._id  %>" class="btn btn-primary"
-							>Read</a
-						>
+		<div class="container mt-3">
+			<div class="row row-cols-3 g-4">
+				<% blogs.forEach(blog => { %>
+				<div class="col">
+					<div class="card">
+						<img src="<%= blog.coverImageUrl %>" class="card-img-top" />
+						<div class="card-body">
+							<h5 class="card-title"><%= blog.title %></h5>
+							<a href="/api/blog/<%= blog._id %>" class="btn btn-primary"
+								>Read</a
+							>
+						</div>
 					</div>
 				</div>
+				<% }) %>
 			</div>
-			<% }) %>
 		</div>
+
 		<%- include('./partials/scripts') %>
+
+		<script>
+			// Add interactivity if necessary
+			document.addEventListener("DOMContentLoaded", () => {
+				const cards = document.querySelectorAll(".card");
+
+				const observerOptions = {
+					root: null, // Observe from the viewport
+					threshold: 0.2, // Trigger animation when 20% of the card is in the viewport
+				};
+
+				const observer = new IntersectionObserver((entries, observer) => {
+					entries.forEach((entry) => {
+						if (entry.isIntersecting) {
+							entry.target.classList.add("visible"); // Add animation class when card is in view
+							observer.unobserve(entry.target); // Stop observing after animation
+						}
+					});
+				}, observerOptions);
+
+				cards.forEach((card) => observer.observe(card));
+				
+			});
+		</script>
 	</body>
 </html>
