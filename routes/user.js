@@ -17,7 +17,8 @@ router
 	})
 	.post(loginUserHandler);
 
-router.get("/", (req, res) => {
-	res.render("home");
+router.get("/logout", (req, res) => {
+	res.clearCookie("token").redirect("/");
 });
+
 export default router;

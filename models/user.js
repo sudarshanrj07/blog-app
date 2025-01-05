@@ -1,5 +1,6 @@
 import { Schema, model } from "mongoose";
 import { createHmac, randomBytes } from "crypto";
+import { genrateUserToken } from "../utils/auth.js";
 
 const userSchema = new Schema(
 	{
@@ -50,19 +51,26 @@ userSchema.pre("save", function (next) {
 	next();
 });
 
-userSchema.static("matchPassword", async function (email, password) {
-	const user = await this.findOne({ email });
-	if (!user) return null;
+userSchema.static(
+	"matchPasswordAndGenrateToken",
+	async function (email, password) {
+		const user = await this.findOne({ email });
+		if (!user) return null;
 
-	const salt = user.salt;
+		const salt = user.salt;
 
-	const hashedPassword = user.password;
+		const hashedPassword = user.password;
 
-	const userProvidedPassword = createHmac("sha256", salt)
-		.update(password)
-		.digest("hex");
-	
-	return hashedPassword === userProvidedPassword ? user : null;
-});
+		const userProvidedPassword = createHmac("sha256", salt)
+			.update(password)
+			.digest("hex");
+
+		if (hashedPassword !== userProvidedPassword)
+			throw new Error("Invalid credentials");
+
+		const token = genrateUserToken(user);
+		return token;
+	}
+);
 
 export const User = model("User", userSchema);

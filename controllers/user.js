@@ -10,15 +10,17 @@ export const createUserHandler = (req, res) => {
 	});
 
 	if (!newUser) return res.render("signup");
-	res.redirect("/api/users");
+	res.redirect("/");
 };
 
 export const loginUserHandler = async (req, res) => {
 	const { email, password } = req.body;
 
-	const user = await User.matchPassword(email, password);
+	try {
+		const token = await User.matchPasswordAndGenrateToken(email, password);
 
-	if (!user) return res.render("signin");
-
-	res.redirect("/api/users");
+		res.cookie("token", token).redirect("/");
+	} catch (error) {
+		res.render("signin", { error });
+	}
 };

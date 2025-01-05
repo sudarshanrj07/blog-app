@@ -41,6 +41,7 @@ build/Release
 #MAC created files
 .DS_Store
 images/
+uploads/
 
 # Dependency directories
 node_modules/
