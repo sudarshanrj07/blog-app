@@ -1,4 +1,7 @@
-<nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
+<nav
+	class="navbar navbar-expand-lg navbar-dark bg-gradient"
+	data-bs-theme="dark"
+>
 	<div class="container-fluid">
 		<a class="navbar-brand" href="#">Blogit</a>
 		<button
@@ -29,7 +32,7 @@
 						data-bs-toggle="dropdown"
 						aria-expanded="false"
 					>
-						dropit
+						<i class="fas fa-user"></i> Account
 					</a>
 					<ul class="dropdown-menu">
 						<li>
@@ -44,15 +47,92 @@
 				<li class="nav-item">
 					<a class="nav-link" href="/api/users/signin">Signin</a>
 				</li>
-
 				<% } %>
 			</ul>
 		</div>
 	</div>
 </nav>
 
-<% if(locals.error ) {%>
+<!-- Error Alert -->
+<% if(locals.error) { %>
 <div class="container mt-4">
-	<div class="alert alert-danger" role="alert"><%= locals.error %></div>
+	<div class="alert alert-danger fade show" role="alert">
+		<strong>Error!</strong> <%= locals.error %>
+	</div>
 </div>
 <% } %>
+
+<!-- Add these styles to make the design interactive and eye-pleasing -->
+<style>
+	/* Navbar styling */
+	.navbar {
+		background: linear-gradient(
+			to right,
+			#6a11cb,
+			#2575fc
+		); /* Gradient background */
+		border-radius: 10px;
+	}
+	.navbar-brand {
+		font-weight: bold;
+		font-size: 1.5rem;
+		transition: transform 0.3s ease;
+	}
+	.navbar-brand:hover {
+		transform: scale(1.1);
+	}
+
+	.navbar-nav .nav-item .nav-link {
+		font-size: 1.1rem;
+		transition: color 0.3s ease, transform 0.3s ease;
+	}
+	.navbar-nav .nav-item .nav-link:hover {
+		color: #fff;
+		transform: translateY(-2px);
+	}
+	.navbar-nav .nav-item.active .nav-link {
+		color: #ffd700;
+	}
+
+	/* Dropdown menu */
+	.nav-item.dropdown:hover .dropdown-menu {
+		display: block;
+		opacity: 1;
+		transform: translateY(5px);
+		transition: opacity 0.3s ease, transform 0.3s ease;
+	}
+	.dropdown-menu {
+		background-color: #121212;
+		border-radius: 5px;
+	}
+
+	.dropdown-item:hover {
+		background-color: #575757;
+		color: #fff;
+	}
+
+	/* Error message styling */
+	.alert {
+		border-radius: 8px;
+		background-color: #f8d7da;
+		color: #721c24;
+		font-size: 1.2rem;
+		padding: 15px 20px;
+		transition: opacity 0.3s ease;
+	}
+	.alert.show {
+		opacity: 1;
+	}
+	.alert.fade {
+		opacity: 0;
+	}
+
+	/* Add subtle hover effect on the toggle button */
+	.navbar-toggler {
+		transition: transform 0.3s ease;
+	}
+
+	.navbar-toggler:hover {
+		transform: rotate(180deg);
+	}
+</style>

@@ -6,12 +6,11 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Homepage</title>
 		<style>
-			/* Custom Styles for the Homepage */
 			body {
 				font-family: "Roboto", sans-serif;
 				background-color: #121212;
 				color: #ddd;
-        margin: 0;
+				margin: 0;
 				padding: 0;
 				transition: background-color 0.3s ease;
 			}
@@ -19,26 +18,22 @@
 			.container {
 				margin-top: 30px;
 			}
-      
 
-      
 			.card {
-        display: flex;
+				display: flex;
 				flex-direction: column;
-        background-color: #000000;
+				background-color: #000000;
 				border: none;
 				border-radius: 8px;
 				overflow: hidden;
 				box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 				transition: transform 0.3s ease, box-shadow 0.3s ease;
-        height: 400px; /* Fixed height for uniform card sizes */
+				height: 500px; /* Fixed height for uniform card sizes */
 				opacity: 0;
 				transform: translateY(20px);
 				transition: opacity 0.6s ease, transform 0.6s ease;
-        
+				color: #ffffff;
 			}
-
-			
 
 			.card-img-top {
 				width: 100%;
@@ -48,7 +43,7 @@
 			}
 
 			.card-body {
-        flex-grow: 1;
+				flex-grow: 1;
 				padding: 16px;
 				display: flex;
 				flex-direction: column;
@@ -59,7 +54,20 @@
 				font-size: 1.25rem;
 				font-weight: 500;
 				color: #fff;
-				margin-bottom: 12px;
+				margin-bottom: 5px;
+			}
+
+			.card-description {
+				font-size: 1rem;
+				font-weight: 500;
+				color: rgba(
+					255,
+					255,
+					255,
+					0.7
+				); /* Lighter gray (semi-transparent white) */
+				margin-bottom: 5px;
+				font-style: italic; /* Italicize the text */
 			}
 
 			.btn-primary {
@@ -88,14 +96,41 @@
 					grid-template-columns: 1fr;
 				}
 			}
-      .card.visible {
+			.card.visible {
 				opacity: 1;
 				transform: translateY(0);
 			}
 
-      .card:hover {
+			.card:hover {
 				transform: translateY(-12px) scale(1.05);
 				box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+			}
+
+			.author-info {
+				display: flex; /* Aligns the image and text horizontally */
+				align-items: center; /* Vertically aligns the items (image and text) */
+			}
+
+			.profile-img {
+				border-radius: 50%; /* Makes the image circular */
+				margin-right: 10px; /* Adds spacing between the image and text */
+			}
+
+			.author-details {
+				display: flex;
+				flex-direction: column; /* Stack the name and date vertically */
+				justify-content: center; /* Vertically aligns the content */
+			}
+
+			.author-name,
+			.created-at {
+				color: #fff; /* Ensures text is white */
+				margin: 0; /* Removes any default margin */
+			}
+
+			.created-at {
+				font-size: 0.875rem; /* Make the date text a bit smaller */
+				color: #bbb; /* Give the date a slightly grey color */
 			}
 		</style>
 	</head>
@@ -110,6 +145,21 @@
 						<img src="<%= blog.coverImageUrl %>" class="card-img-top" />
 						<div class="card-body">
 							<h5 class="card-title"><%= blog.title %></h5>
+							<p class="card-description">
+								<%= blog.body.split(" ").slice(0, 20).join(" ") %>
+							</p>
+							<div class="author-info">
+								<img
+									src="<%= blog.createdBy.profileImageUrl %>"
+									width="40px"
+									alt="Profile Image"
+									class="profile-img"
+								/>
+								<div class="author-details">
+									<span class="author-name"><%= blog.createdBy.name %></span>
+									<span class="created-at"><%= blog.createdAt.toLocaleDateString('en-GB'); %></span>
+								</div>
+							</div>
 							<a href="/api/blog/<%= blog._id %>" class="btn btn-primary"
 								>Read</a
 							>
@@ -123,26 +173,24 @@
 		<%- include('./partials/scripts') %>
 
 		<script>
-			// Add interactivity if necessary
 			document.addEventListener("DOMContentLoaded", () => {
 				const cards = document.querySelectorAll(".card");
 
 				const observerOptions = {
-					root: null, // Observe from the viewport
-					threshold: 0.2, // Trigger animation when 20% of the card is in the viewport
+					root: null,
+					threshold: 0.2,
 				};
 
 				const observer = new IntersectionObserver((entries, observer) => {
 					entries.forEach((entry) => {
 						if (entry.isIntersecting) {
-							entry.target.classList.add("visible"); // Add animation class when card is in view
-							observer.unobserve(entry.target); // Stop observing after animation
+							entry.target.classList.add("visible");
+							observer.unobserve(entry.target);
 						}
 					});
 				}, observerOptions);
 
 				cards.forEach((card) => observer.observe(card));
-				
 			});
 		</script>
 	</body>

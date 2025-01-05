@@ -5,6 +5,7 @@ const secret = process.env.JWT_SECRET;
 export const genrateUserToken = (user) => {
 	const payload = {
 		_id: user._id,
+		name: user.name,
 		email: user.email,
 		profileImageUrl: user.profileImageUrl,
 		role: user.role,
